@@ -1,51 +1,46 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 var app = {
-    // Application Constructor
     initialize: function() {
-        this.bindEvents();
+        document.addEventListener('deviceready', app.onDeviceReady, false);
+        //app.onDeviceReady();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+        navigator.contactsPhoneNumbers.list(function(contacts) {
+            //console.log(contacts.length + ' contacts found');
+            //$('#content').append(contacts.length + ' contacts found.<br/>');
+            for(var i = 0; i < contacts.length; i++) {
+                var concatContact = "<div class='row outercard'><div class='col-xs-3 left-column'><img src='img/customer.png'/></div><div class='col-xs-9 right-column'><ul class='list-group'><li class='list-group-item'><b>"+contacts[i].displayName+"</b></li>";
+                //console.log(contacts[i].id + " - " + contacts[i].displayName);
+                //$('#content').append(contacts[i].id + " - " + contacts[i].displayName + '<br/>');
+                for(var j = 0; j < contacts[i].phoneNumbers.length; j++) {
+                    var phone = contacts[i].phoneNumbers[j];
+                    //console.log("===> " + phone.type + "  " + phone.number + " (" + phone.normalizedNumber+ ")");
+                    concatContact += "<li class='list-group-item'><b>"+phone.type+" :</b><br/>"+phone.number+"<input type='checkbox' name='my_number' value='"+phone.normalizedNumber+"' class='pull-right'/></li>";
+                    //$('#content').append("===> " + phone.type + "  " + phone.number + " (" + phone.normalizedNumber+ ")<br/>");
+                }
+                concatContact += "</ul></div></div>";
+                $('#content').append(concatContact);
+                concatContact = "";
+            }
+        }, function(error) {
+            //console.error(error);
+            $('#content').append(error);
+        });
     }
+    /*receivedEvent: function(id) {
+        // find all contacts in any name field
+        var options = new ContactFindOptions();
+        options.filter = "";
+        options.multiple = true;
+        options.desiredFields = [navigator.contacts.fieldType.id];
+        var fields = [navigator.contacts.fieldType.displayName];
+        navigator.contacts.find(fields, app.onSuccess, app.onError, options);
+    },
+    onSuccess: function(contacts) {
+        alert('Found ' + contacts.length + ' contacts.');
+    },
+    onError: function(contactError) {
+        alert('onError!');
+    }*/
 };
 
 app.initialize();
