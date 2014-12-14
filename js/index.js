@@ -8,7 +8,7 @@ var app = {
             //console.log(contacts.length + ' contacts found');
             //$('#content').append(contacts.length + ' contacts found.<br/>');
             for(var i = 0; i < contacts.length; i++) {
-                var concatContact = "<div class='row outercard'><div class='col-xs-3 left-column'><img src='img/customer.png'/></div><div class='col-xs-9 right-column'><ul class='list-group'><li class='list-group-item'><b>"+contacts[i].displayName+"</b></li>";
+                var concatContact = "<div class='row outercard'><div class='col-xs-3 left-column'><img src='content://com.android.contacts/contacts/"+contacts[i].id+"/photo' onerror='app.imgError(this)' width='64px' height='64px'/></div><div class='col-xs-9 right-column'><ul class='list-group'><li class='list-group-item'><b>"+contacts[i].displayName+"</b></li>";
                 //console.log(contacts[i].id + " - " + contacts[i].displayName);
                 //$('#content').append(contacts[i].id + " - " + contacts[i].displayName + '<br/>');
                 for(var j = 0; j < contacts[i].phoneNumbers.length; j++) {
@@ -25,6 +25,16 @@ var app = {
             //console.error(error);
             $('#content').append(error);
         });
+    },
+    imgError: function(source) {
+        source.src = "img/customer.png";
+    },
+    getSelectedContacts: function() {
+        var selectedContacts = "";
+        $('#content :checked').each(function() {
+            selectedContacts += this.value+"&#";
+        });
+        alert(selectedContacts);
     }
     /*receivedEvent: function(id) {
         // find all contacts in any name field
@@ -44,3 +54,7 @@ var app = {
 };
 
 app.initialize();
+
+$('#call_init').click( function() {
+    app.getSelectedContacts();
+})
