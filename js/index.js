@@ -45,11 +45,19 @@ var app = {
         var options = new ContactFindOptions();
         options.filter = "";
         options.multiple = true;
-        options.desiredFields = [navigator.contacts.fieldType.id];
-        var fields = [navigator.contacts.fieldType.displayName];
+        options.desiredFields = [navigator.contacts.fieldType.id, navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
+        var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name, navigator.contacts.fieldType.phoneNumbers];
+        //options.desiredFields = [navigator.contacts.fieldType.id];
+        //var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
         navigator.contacts.find(fields, app.onContactSuccess, app.onContactError, options);
     },
     onContactSuccess: function(contacts) {
+        $('#content').append(JSON.stringify(contacts));
+        $('#content').append('<br/><br/>');
+        for (var i = 0; i < contacts.length; i++) {
+            $('#content').append(JSON.stringify(contacts[i]));
+        }
+        $('#content').append('<br/><br/>');
         $('#content').append('Found ' + contacts.length + ' contacts.');
         //alert('Found ' + contacts.length + ' contacts.');
     },
