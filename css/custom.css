@@ -23,6 +23,14 @@ header > button {
     position: absolute;
 }
 
+.search {
+    border-radius: 1em;
+}
+
+.search:focus {
+    border: none;
+}
+
 .list-group {
     padding-left: 0;
     margin-bottom: 20px;
@@ -78,4 +86,13 @@ footer {
     header > button {
 
     }
+}
+
+.list {
+    padding: 0;
+    margin: 0;
+}
+
+.list > li {
+    display: block;
 }
