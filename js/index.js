@@ -79,3 +79,13 @@ app.initialize();
 $('#call_init').click( function() {
     app.getSelectedContacts();
 });
+
+$('.search').on('focus', function () {
+   $('footer').hide();
+});
+
+$('.search').on('blur', function(){
+    setTimeout(function() {
+        $('footer').show();
+    }, 500);
+});
